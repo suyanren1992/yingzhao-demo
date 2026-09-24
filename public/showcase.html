@@ -1026,14 +1026,36 @@
 #footer .slogan { font-family:var(--font-display); font-size:var(--text-headline); letter-spacing:-0.04em; text-wrap:balance; margin:0 0 var(--space-sm); }
 #footer .slogan em { color:var(--night-accent); font-style:normal; }
 #footer .sub { color:oklch(80% 0.02 85); font-size:var(--text-small); margin:0; }
+#practical { margin:0; padding:var(--space-3xl) var(--space-lg); font-family:var(--font-body); color:var(--ink); line-height:1.7; background:var(--bg); }
+#practical * { box-sizing:border-box; }
+#practical .practical-inner { max-width:1100px; margin:0 auto; }
+#practical h2 { font-family:var(--font-display); font-size:var(--text-headline); letter-spacing:-0.04em; text-wrap:balance; margin:0 0 var(--space-sm); }
+#practical .lead { color:var(--ink-soft); max-width:62ch; margin:0 0 var(--space-xl); }
+#practical .p-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:var(--space-lg); }
+#practical .p-card { background:var(--surface); border-radius:var(--radius-lg); padding:var(--space-lg); box-shadow:var(--shadow-md); border-top:6px solid var(--accent); }
+#practical .p-card h3 { font-family:var(--font-display); font-size:var(--text-title); margin:0 0 var(--space-sm); }
+#practical .p-line { background:var(--surface-2); border-radius:var(--radius-md); padding:var(--space-sm) var(--space-md); margin-top:var(--space-2xs); font-size:var(--text-small); }
+#practical .p-line.q { font-family:var(--font-display); }
+#practical .p-line small { color:var(--ink-soft); }
 @media (prefers-reduced-motion: reduce) {
-  #genesis *, #ledger *, #care *, #boundaries *, #team *, #footer * { transition:none !important; animation:none !important; }
+  #genesis *, #ledger *, #care *, #boundaries *, #team *, #footer *, #practical * { transition:none !important; animation:none !important; }
 }
 
 </style>
 </head>
 <body>
-<nav id="topnav" aria-label="页面导航"><a class="brand" href="#hero">映照</a><div class="links"><a href="#philosophy">哲学</a><a href="#cards">三卡演示</a><a href="#genesis">开局仪式</a><a href="#ledger">账本</a><a href="#care">关怀</a><a href="#team">团队</a></div></nav>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-lantern" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="10.5" rx="7" ry="6.5"/><path d="M12 4v13M8.5 4.8c-1.6 3-1.6 8.4 0 11.4M15.5 4.8c1.6 3 1.6 8.4 0 11.4"/><path d="M9 3.2h6M9 17.8h6"/><path d="M12 17.8v2.4M10.6 20.2l1.4 2 1.4-2"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="12" rx="2.5"/><circle cx="12" cy="13" r="3.4"/><path d="M8.5 7l1.2-2.2h4.6L15.5 7"/></symbol>
+<symbol id="i-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8 9h8M8 12.5h8M8 16h4.5"/></symbol>
+<symbol id="i-mirror" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="9" rx="5.5" ry="7"/><path d="M12 16v4M8.5 20h7"/><path d="M9.5 6.5c.8-1 1.8-1.6 3-1.8"/></symbol>
+<symbol id="i-chain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 14.5a3.5 3.5 0 0 0 5 0l2.5-2.5a3.5 3.5 0 1 0-5-5L10.5 8.5"/><path d="M14.5 9.5a3.5 3.5 0 0 0-5 0L7 12a3.5 3.5 0 1 0 5 5l1.5-1.5"/></symbol>
+<symbol id="i-signal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-6.5L20 11"/><path d="M6 10v9h12v-9"/><path d="M9 14.5h2l1-2 1.5 4 1-2H17"/></symbol>
+<symbol id="i-food" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11h15v4.5a4 4 0 0 1-4 4h-7a4 4 0 0 1-4-4z"/><path d="M7 11a5 5 0 0 1 10 0"/><path d="M12 6v1.5M10 5.5h4"/></symbol>
+<symbol id="i-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.4-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.6 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.2"/></symbol>
+</defs></svg>
+<nav id="topnav" aria-label="页面导航"><a class="brand" href="#hero">映照</a><div class="links"><a href="#philosophy">哲学</a><a href="#cards">三卡演示</a><a href="#practical">实用</a><a href="#genesis">开局仪式</a><a href="#ledger">账本</a><a href="#care">关怀</a><a href="#team">团队</a></div></nav>
 <style>
 #topnav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px clamp(16px,4vw,48px);background:oklch(97.5% 0.012 85 / .82);backdrop-filter:blur(12px);border-bottom:1px solid oklch(88% 0.01 80 / .6);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
 #topnav .brand{font-family:"Noto Serif SC",serif;font-weight:700;font-size:1.15rem;color:oklch(28% 0.02 60);text-decoration:none;letter-spacing:-0.02em}
@@ -1043,6 +1065,7 @@
 html{scroll-behavior:smooth;scroll-padding-top:64px}
 body{margin:0;background:oklch(97.5% 0.012 85)}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.svgi { display: inline-block; vertical-align: -3px; width: 1.05em; height: 1.05em; }
 </style>
 <section id="hero" aria-label="首屏">
     <canvas id="lantern-canvas" class="lantern-canvas" aria-hidden="true"></canvas>
@@ -1321,12 +1344,12 @@ body{margin:0;background:oklch(97.5% 0.012 85)}
   <p class="cards-lead">生活抽卡是映照的日常入口：每天 1–3 张，共享统一打扰预算。下面三张卡都可以真实点按——体验"被发现、被惦记、照见自己"的过程。</p>
   <div class="cards-wrap">
     <div class="demo-card" id="demo-moment">
-      <p class="demo-title">🕯️ 时刻卡 <span class="tag">已发生的美好</span></p>
+      <p class="demo-title"><svg class="svgi"><use href="#i-lantern"/></svg> 时刻卡 <span class="tag">已发生的美好</span></p>
       <div class="demo-stage">
         <div class="fade-swap" id="moment-stage">
           <div class="anon-card">
             <p class="who">刚刚，厨房里有人忙了一会儿</p>
-            <p style="font-size:var(--text-caption);color:var(--ink-soft);margin:0;">📷 18:32 · 忙碌了 42 分钟 · 四证据帧复核通过</p>
+            <p style="font-size:var(--text-caption);color:var(--ink-soft);margin:0;"><svg class="svgi"><use href="#i-camera"/></svg> 18:32 · 忙碌了 42 分钟 · 四证据帧复核通过</p>
           </div>
           <p class="hint">猜猜是谁？也可以直接揭开</p>
           <div class="btn-row" id="guess-row">
@@ -1339,7 +1362,7 @@ body{margin:0;background:oklch(97.5% 0.012 85)}
       </div>
     </div>
     <div class="demo-card" id="demo-task">
-      <p class="demo-title">🎴 任务卡 <span class="tag">宝可梦式小任务</span></p>
+      <p class="demo-title"><svg class="svgi"><use href="#i-card"/></svg> 任务卡 <span class="tag">宝可梦式小任务</span></p>
       <div class="demo-stage" style="text-align:center;">
         <div class="fade-swap" id="task-stage">
           <p class="hint" style="margin-bottom:var(--space-md);">抽一张今天的任务卡</p>
@@ -1347,12 +1370,12 @@ body{margin:0;background:oklch(97.5% 0.012 85)}
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:var(--space-2xs);justify-content:center;">
-        <span class="flame" aria-hidden="true"></span>
+        <svg class="svgi" style="width:22px;height:22px;color:var(--accent-deep)" aria-hidden="true"><use href="#i-lantern"/></svg>
         <span>灯火</span><span class="light-count" id="light-count">0</span>
       </div>
     </div>
     <div class="demo-card" id="demo-mirror">
-      <p class="demo-title">🪞 悟见卡 <span class="tag">客观自我的镜像</span></p>
+      <p class="demo-title"><svg class="svgi"><use href="#i-mirror"/></svg> 悟见卡 <span class="tag">客观自我的镜像</span></p>
       <div class="demo-stage">
         <div class="fade-swap" id="mirror-stage">
           <div class="wujian-card">
@@ -1382,6 +1405,31 @@ body{margin:0;background:oklch(97.5% 0.012 85)}
     </div>
   </div>
 </section>
+<section id="practical" aria-label="实用价值">
+  <div class="practical-inner">
+    <h2>实用的一面 · 它也在认真干活</h2>
+    <p class="lead">趣味性之外，是每天都在用的实用价值——所有回答遵循四要素格式：时间、证据、信息缺口、下一步。</p>
+    <div class="p-grid">
+      <div class="p-card">
+        <h3><svg class="svgi"><use href="#i-pin"/></svg> 物品记忆 · Last Seen</h3>
+        <div class="p-line q">"蓝色水杯在哪？"</div>
+        <div class="p-line a">最后一次看到：<b>厨房台面 · 今天 18:23</b><br><small>18:40 后进入盲区，无法确认——比假装全知更建立信任</small></div>
+      </div>
+      <div class="p-card">
+        <h3><svg class="svgi"><use href="#i-food"/></svg> 食材 · 台面自动扫描</h3>
+        <div class="p-line a">土豆 ×3 · 牛腩 ×1 · 鸡蛋半盒<small>（18:12 台面扫描）</small></div>
+        <div class="p-line a">想做土豆牛腩？<b>家里还有结余土豆</b>，不用买</div>
+      </div>
+      <div class="p-card">
+        <h3><svg class="svgi"><use href="#i-signal"/></svg> 安心信号 · 中性事实</h3>
+        <div class="p-line a">奶奶今天 7:12 起床（平常 7 点左右）· <b>一切如常</b></div>
+        <div class="p-line a">孩子 17:42 到家（门口识别）· <b>已到家</b></div>
+        <div class="p-line a">妈妈今天 10:04 起床（平常 7 点）<br><small>仅告知——没有行动按钮、没有回应记录、没有提醒</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="genesis" aria-label="开局仪式">
   <div class="genesis-inner">
     <h2>开局仪式 · 全家牵手，写入创世区块</h2>
@@ -1393,7 +1441,7 @@ body{margin:0;background:oklch(97.5% 0.012 85)}
       <div class="hand" data-who="（监护代确认）"><div class="who">奶奶</div><div class="st">监护代确认</div></div>
     </div>
     <div class="genesis-block" id="genesis-block" aria-live="polite">
-      <div class="gb-title">⛓️ GENESIS BLOCK · 家庭账本的第一个区块</div>
+      <div class="gb-title"><svg class="svgi"><use href="#i-chain"/></svg> GENESIS BLOCK · 家庭账本的第一个区块</div>
       <div class="row">confirmations: 爸爸 ✓ · 妈妈 ✓ · 孩子 ✓ · 奶奶(监护) ✓</div>
       <div class="row">agreement: 《映照家庭协议》v1 · 规则由全家共同制定</div>
       <div class="row">prev_hash: 0x0000…0000</div>
@@ -1426,7 +1474,7 @@ body{margin:0;background:oklch(97.5% 0.012 85)}
   <p class="lead">安心信号是中性事实：没有行动按钮、没有回应记录、没有提醒。系统递送的是回执，不是账单。</p>
   <div class="care-grid">
     <div class="care-card">
-      <h3>🌿 老人的付出重新被看见</h3>
+      <h3><svg class="svgi"><use href="#i-signal"/></svg> 老人的付出重新被看见</h3>
       <div class="signal">
         <div class="s-title">时刻卡 · 刚刚</div>
         <p>"阳台有人侍弄了很久" —— 奶奶浇了一下午的花</p>
@@ -1438,7 +1486,7 @@ body{margin:0;background:oklch(97.5% 0.012 85)}
       <p class="note">老人最深的失落不是孤独，是"不再被需要"——映照让 TA 的劳动重新进入全家的目光。</p>
     </div>
     <div class="care-card">
-      <h3>🌙 安心信号 · 由本人定义</h3>
+      <h3><svg class="svgi"><use href="#i-signal"/></svg> 安心信号 · 由本人定义</h3>
       <div class="signal">
         <div class="s-title">安心信号 · 仅子女可见</div>
         <p>"妈妈今天 10 点起床，平常 7 点。"</p>
@@ -1452,20 +1500,20 @@ body{margin:0;background:oklch(97.5% 0.012 85)}
     <h2>边界 · 我们永久不做的事</h2>
     <p class="lead">控制是眼睛（监视）的属性，不是镜子（映照）的属性。</p>
     <div class="b-list">
-      <div class="b-item"><b>🚫 表情 → 情绪推测</b><span>表情不等于情绪（Barrett et al., Science 2019）；止步于行为事实，情绪的意义由人完成</span></div>
-      <div class="b-item"><b>🚫 家庭内排名与对比</b><span>灯火只花不比；无可比较，即无施压依据</span></div>
-      <div class="b-item"><b>🚫 真实金钱兑换</b><span>灯火永不兑钱；关怀一旦计酬，就从情感变成劳务</span></div>
-      <div class="b-item"><b>🚫 内疚设计</b><span>零内疚工程：没有"不得不"，关怀永远是被发现的</span></div>
-      <div class="b-item"><b>🚫 情感契约化</b><span>公约只约束共同劳动，绝不约束情感行为</span></div>
-      <div class="b-item"><b>🚫 未确认即理解</b><span>AI 对人的所有认识，必须来自本人确认过的事实</span></div>
+      <div class="b-item"><b>✕ 表情 → 情绪推测</b><span>表情不等于情绪（Barrett et al., Science 2019）；止步于行为事实，情绪的意义由人完成</span></div>
+      <div class="b-item"><b>✕ 家庭内排名与对比</b><span>灯火只花不比；无可比较，即无施压依据</span></div>
+      <div class="b-item"><b>✕ 真实金钱兑换</b><span>灯火永不兑钱；关怀一旦计酬，就从情感变成劳务</span></div>
+      <div class="b-item"><b>✕ 内疚设计</b><span>零内疚工程：没有"不得不"，关怀永远是被发现的</span></div>
+      <div class="b-item"><b>✕ 情感契约化</b><span>公约只约束共同劳动，绝不约束情感行为</span></div>
+      <div class="b-item"><b>✕ 未确认即理解</b><span>AI 对人的所有认识，必须来自本人确认过的事实</span></div>
     </div>
   </div>
 </section>
 <section id="team" aria-label="团队">
   <h2>团队 · 映照</h2>
   <div class="members">
-    <div class="member"><div class="avatar">🧭</div><b>砚仁 · 队长</b><span>产品方案 / 前端交互 / 路演</span></div>
-    <div class="member"><div class="avatar">⚙️</div><b>跳</b><span>后端服务 / 视觉与音频算法 / 设备接入</span></div>
+    <div class="member"><div class="avatar"><svg class="svgi" style="width:26px;height:26px"><use href="#i-compass"/></svg></div><b>砚仁 · 队长</b><span>产品方案 / 前端交互 / 路演</span></div>
+    <div class="member"><div class="avatar"><svg class="svgi" style="width:26px;height:26px"><use href="#i-chain"/></svg></div><b>跳</b><span>后端服务 / 视觉与音频算法 / 设备接入</span></div>
   </div>
   <p class="team-note">"轻接入、重闭环"架构：引擎与前端不依赖真实硬件即可开发（模拟事件源驱动），决赛接入官方 SDK 只需替换适配层。</p>
 </section>
@@ -1596,34 +1644,34 @@ body{margin:0;background:oklch(97.5% 0.012 85)}
       '<p class="reveal-name">' + (isDirect ? '' : '你猜是' + g + '，揭晓——') + '是<b>爸爸</b>，他在厨房忙碌了 42 分钟——土豆牛腩正在锅里</p>' +
       '<p class="hint">用你们家自己的风格回应一句吧</p>' +
       '<div class="reply-options">' +
-        '<span class="reply-pick">辛苦了 ❤️</span><span class="reply-pick">今晚一定很好吃</span><span class="reply-pick">我来摆碗筷！</span></div>';
+        '<span class="reply-pick">辛苦了</span><span class="reply-pick">今晚一定很好吃</span><span class="reply-pick">我来摆碗筷！</span></div>';
     swap(momentStage, html);
     var picks = momentStage.querySelectorAll(".reply-pick");
     picks.forEach(function(p){ p.addEventListener("click", function(){
       picks.forEach(function(x){ x.classList.remove("sel"); }); p.classList.add("sel");
       setTimeout(function(){
-        swap(momentStage, '<div class="receipt"><span class="heart">💛</span><b>已私达给当事人</b><p class="hint" style="margin-top:6px;">爸爸收到一条仅本人可见的"被看见回执"</p></div>');
+        swap(momentStage, '<div class="receipt"><b>已私达给当事人</b><p class="hint" style="margin-top:6px;">爸爸收到一条仅本人可见的"被看见回执"</p></div>');
       }, reduced ? 0 : 500);
     }); });
   });
   var taskStage = document.getElementById("task-stage");
   var lightCount = 0, lightEl = document.getElementById("light-count");
   var tasks = [
-    { q: "站起来，离开沙发 3 分钟", s: "你今天已在沙发连续工作 3 小时", v: "镜头将核实画面中出现的站立活动" },
-    { q: "读 10 分钟书", s: "你上次翻开书，是 12 天前", v: "镜头将核实阅读姿态与持续时长" },
-    { q: "给团长梳 5 分钟毛", s: "它今天独自在家 9 小时了", v: "镜头将核对你与它的互动画面" }
+    { q: "要不要站起来活动 3 分钟？", s: "你今天已在沙发连续工作 3 小时——镜头看到的客观事实", v: "画面中出现的站立活动" },
+    { q: "今天要不要翻 10 分钟书？", s: "你上次翻开书，是 12 天前——镜头看到的客观事实", v: "阅读姿态与持续时长" },
+    { q: "要不要陪团长 5 分钟？", s: "它今天独自在家 9 小时了——镜头看到的客观事实", v: "你与它的互动画面" }
   ];
   function drawTask(){
     var t = tasks[Math.floor(Math.random()*tasks.length)];
     swap(taskStage, '<div class="task-face"><p style="font-size:var(--text-caption);color:var(--ink-soft);margin:0;">今日任务卡</p>' +
       '<p class="q">' + t.q + '</p><p class="hint">' + t.s + '</p>' +
-      '<p class="hint" style="color:var(--accent-deep);margin-top:6px;">📷 ' + t.v + '</p>' +
+      '<p class="hint" style="color:var(--accent-deep);margin-top:6px;">镜头将核实：' + t.v + '</p>' +
       '<div class="btn-row" style="margin-top:var(--space-md);"><button id="task-done">完成了</button><button class="ghost" id="task-skip">跳过（永远可跳过）</button></div></div>');
     document.getElementById("task-done").addEventListener("click", function(){
-      swap(taskStage, '<div class="receipt"><span class="heart">📷</span><b>智能镜头核实中…</b><p class="hint" style="margin-top:6px;">画面帧 → AI 复核 → 确认时长与动作</p></div>');
+      swap(taskStage, '<div class="receipt"><b>智能镜头核实中…</b><p class="hint" style="margin-top:6px;">画面帧 → AI 复核 → 确认时长与动作</p></div>');
       setTimeout(function(){
         lightCount += 1; lightEl.textContent = lightCount;
-        swap(taskStage, '<div class="receipt"><span class="heart">🕯️</span><b>✓ 已核实 · 灯火 +1</b><p class="hint" style="margin-top:6px;">AI 提议、镜头核实、人确认——自觉不是机制，核实才是</p></div>');
+        swap(taskStage, '<div class="receipt"><b>✓ 已核实 · 灯火 +1</b><p class="hint" style="margin-top:6px;">AI 提议、镜头核实、人确认——自觉不是机制，核实才是</p></div>');
       }, reduced ? 0 : 1600);
     });
     document.getElementById("task-skip").addEventListener("click", function(){

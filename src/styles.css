@@ -48,4 +48,15 @@ button.ghost, button.soft { background: transparent; border: 1.5px solid var(--l
 .tx { font-size: .82rem; padding: 8px 4px; border-bottom: 1px dashed var(--line); display: flex; gap: 8px; align-items: baseline; }
 .tx small { margin-left: auto; color: var(--ink-soft); }
 .sub { font-size: .9rem; margin: 16px 0 6px; }
+.lantern-color { color: var(--accent-deep); }
+.card header { display: flex; align-items: center; gap: 5px; }
+.card header time { margin-left: auto; font-weight: 400; }
+.tabbar button svg { vertical-align: -3px; }
+.search-mock { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 10px 16px; font-size: .82rem; color: var(--ink-soft); margin-bottom: 12px; }
+.answer { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 12px; padding: 12px; font-size: .88rem; margin-bottom: 12px; }
+.answer.food { display: flex; align-items: flex-start; gap: 8px; }
+.signal-row { display: flex; gap: 10px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-bottom: 10px; font-size: .86rem; }
+.signal-row .sig-icon { color: var(--accent-deep); margin-top: 2px; }
+.signal-row small { color: var(--ink-soft); }
+.signal-row.note { border-left: 4px solid var(--accent); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

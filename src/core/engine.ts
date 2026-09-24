@@ -58,9 +58,9 @@ export async function confirmCard(card: Card, who: string) {
 
 // 任务卡
 const TASK_POOL = [
-  { title: "站起来，离开沙发 3 分钟", body: "你今天已在沙发连续工作 3 小时", verify: "镜头将核实画面中出现的站立活动" },
-  { title: "读 10 分钟书", body: "你上次翻开书，是 12 天前", verify: "镜头将核实阅读姿态与持续时长" },
-  { title: "给团长梳 5 分钟毛", body: "它今天独自在家 9 小时了", verify: "镜头将核对你与它的互动画面" },
+  { title: "要不要站起来活动 3 分钟？", body: "你今天已在沙发连续工作 3 小时——这是镜头看到的客观事实", verify: "镜头将核实画面中出现的站立活动" },
+  { title: "今天要不要翻 10 分钟书？", body: "你上次翻开书，是 12 天前——这是镜头看到的客观事实", verify: "镜头将核实阅读姿态与持续时长" },
+  { title: "要不要陪团长 5 分钟？", body: "它今天独自在家 9 小时了——这是镜头看到的客观事实", verify: "镜头将核对你与它的互动画面" },
 ];
 
 export function drawTaskCard(): Card {

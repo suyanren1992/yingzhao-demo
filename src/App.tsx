@@ -4,15 +4,17 @@ import { ledger } from "./core/ledger";
 import { MockAdapter } from "./adapters/mock";
 import type { DeviceAdapter } from "./adapters/types";
 import { CardView, DrawButtons } from "./ui/CardView";
-import { Timeline } from "./ui/Timeline";
+import { ItemsView } from "./ui/ItemsView";
+import { SignalsView } from "./ui/SignalsView";
 import { LedgerView } from "./ui/LedgerView";
 import { LightView } from "./ui/LightView";
+import { Icon } from "./ui/Icon";
 
 const adapter: DeviceAdapter = new MockAdapter();
 
 export default function App() {
   const [, force] = useState(0);
-  const [tab, setTab] = useState<"cards" | "timeline" | "ledger" | "light">("cards");
+  const [tab, setTab] = useState<"cards" | "items" | "signals" | "ledger" | "light">("cards");
 
   useEffect(() => {
     onCards(() => force(n => n + 1));
@@ -41,13 +43,14 @@ export default function App() {
             {cards.map(c => <CardView key={c.id} card={c} />)}
           </div>
         )}
-        {tab === "timeline" && <Timeline />}
+        {tab === "items" && <ItemsView />}
+        {tab === "signals" && <SignalsView />}
         {tab === "ledger" && <LedgerView />}
         {tab === "light" && <LightView />}
       </main>
       <nav className="tabbar">
-        {([["cards", "🕯️ 卡片"], ["timeline", "🕰️ 时间线"], ["ledger", "⛓️ 账本"], ["light", "🪔 灯火"]] as const).map(([k, label]) => (
-          <button key={k} className={tab === k ? "on" : ""} onClick={() => setTab(k)}>{label}</button>
+        {([["cards", "lantern", "卡片"], ["items", "pin", "物品"], ["signals", "signal", "信号"], ["ledger", "chain", "账本"], ["light", "lantern", "灯火"]] as const).map(([k, icon, label]) => (
+          <button key={k} className={tab === k ? "on" : ""} onClick={() => setTab(k as typeof tab)}><Icon name={icon} size={16} /><br />{label}</button>
         ))}
       </nav>
     </div>
