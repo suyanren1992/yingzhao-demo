@@ -4,10 +4,10 @@ import type { DeviceEvent } from "../core/types";
 
 const ZONES = ["厨房", "客厅", "阳台", "书房"];
 const KINDS = [
-  { kind: "cooking", caption: "有人在认真备菜，台面出现了土豆和牛腩" },
-  { kind: "tidying", caption: "有人把散落的玩具收回了箱子" },
-  { kind: "watering", caption: "有人在阳台侍弄花草，持续了一下午" },
-  { kind: "reading", caption: "有人窝在沙发里读完了半本书" },
+  { kind: "cooking", caption: "有人在厨房忙碌了 42 分钟——台面上是土豆、牛腩和一锅汤" },
+  { kind: "sofa-work", caption: "有人在沙发里连续工作了 3 小时——今天已是第 5 天" },
+  { kind: "reading", caption: "有人读了 35 分钟的书——距上次翻开书，已是 12 天前" },
+  { kind: "watering", caption: "有人在阳台侍弄花草 28 分钟——那盆月季开了今年第一朵" },
 ];
 
 const GRADIENTS = [

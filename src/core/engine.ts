@@ -58,23 +58,27 @@ export async function confirmCard(card: Card, who: string) {
 
 // 任务卡
 const TASK_POOL = [
-  { title: "找到那个三个月没出现过的保温杯", body: "想想它陪你经历过什么" },
-  { title: "今天问爸爸一个他年轻时的问题", body: "一次跨代际的看见" },
-  { title: "给家里的绿植拍一张照", body: "让它进入家庭时间线" },
-  { title: "陪团长玩十分钟", body: "它今天独自在家九小时了" },
+  { title: "站起来，离开沙发 3 分钟", body: "你今天已在沙发连续工作 3 小时", verify: "镜头将核实画面中出现的站立活动" },
+  { title: "读 10 分钟书", body: "你上次翻开书，是 12 天前", verify: "镜头将核实阅读姿态与持续时长" },
+  { title: "给团长梳 5 分钟毛", body: "它今天独自在家 9 小时了", verify: "镜头将核对你与它的互动画面" },
 ];
 
 export function drawTaskCard(): Card {
   const t = TASK_POOL[Math.floor(Math.random() * TASK_POOL.length)];
-  const card: Card = { id: "task-" + ++seq, kind: "task", title: t.title, body: t.body, status: "fresh", createdAt: Date.now() };
+  const card: Card = { id: "task-" + ++seq, kind: "task", title: t.title, body: t.body, verify: t.verify, status: "fresh", createdAt: Date.now() };
   cards.unshift(card);
   emit();
   return card;
 }
 
-export function completeTask(card: Card) {
+// 任务完成：进入镜头核实（自觉不是机制，核实才是）
+export function startVerify(card: Card) {
+  transition(card, "verifying");
+}
+
+export function completeTask(card: Card, method: "镜头核实" | "拍照核实") {
   transition(card, "confirmed");
-  light.add(1, "任务卡完成");
+  light.add(1, "任务卡完成 · " + method);
 }
 
 // 悟见卡（行为事实镜像，只对自己可见）

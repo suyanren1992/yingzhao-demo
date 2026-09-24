@@ -20,7 +20,9 @@ export interface Card {
   title: string;
   body: string;
   event?: DeviceEvent;
-  status: "fresh" | "guessing" | "revealed" | "responded" | "confirmed" | "expired" | "skipped";
+  /** 任务卡的镜头核实方式说明 */
+  verify?: string;
+  status: "fresh" | "guessing" | "revealed" | "responded" | "verifying" | "confirmed" | "expired" | "skipped";
   createdAt: number;
 }
 

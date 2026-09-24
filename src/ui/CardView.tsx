@@ -1,5 +1,11 @@
 import type { Card } from "../core/types";
-import { transition, confirmCard, drawTaskCard, drawMirrorCard, completeTask, answerMirror } from "../core/engine";
+import { transition, confirmCard, drawTaskCard, drawMirrorCard, startVerify, completeTask, answerMirror } from "../core/engine";
+
+function verifyFlow(card: Card, method: "镜头核实" | "拍照核实") {
+  startVerify(card);
+  // 模拟镜头核实耗时：真实实现 = Web SDK 截图帧 → AI 复核
+  setTimeout(() => completeTask(card, method), 2200);
+}
 
 const GUESS = ["爸爸", "妈妈", "孩子", "直接揭开"];
 
@@ -17,7 +23,7 @@ function MomentCard({ card }: { card: Card }) {
       {(card.status === "fresh" || card.status === "guessing") && (
         <>
           <h3>{card.title}</h3>
-          <p className="evidence">证据:{ev?.caption}({ev?.zone} · 四证据帧复核通过)</p>
+          <p className="evidence">📷 镜头看到:{ev?.caption}({ev?.zone} · 四证据帧复核通过)</p>
           <div className="comic">
             {(ev?.frames ?? ["#eee", "#ddd", "#ccc", "#bbb"]).map((f, i) => (
               <div key={i} className="frame" style={{ background: "linear-gradient(150deg," + f + ",#fff3)" }}>{["🍳", "🥬", "🔥", "🍲"][i]}</div>
@@ -70,13 +76,22 @@ function TaskCard({ card }: { card: Card }) {
         <>
           <h3>{card.title}</h3>
           <p className="evidence">{card.body}</p>
+          <p className="verify-note">📷 {card.verify}——自觉不是机制,核实才是</p>
           <div className="row">
-            <button onClick={() => completeTask(card)}>完成了(+1 灯火)</button>
+            <button onClick={() => verifyFlow(card, "镜头核实")}>我在镜头前完成</button>
+            <button className="soft" onClick={() => verifyFlow(card, "拍照核实")}>视野外完成 · 拍照核实</button>
             <button className="ghost" onClick={() => transition(card, "skipped")}>跳过(永远可跳过)</button>
           </div>
         </>
       )}
-      {card.status === "confirmed" && <div className="receipt done">🕯️ 灯火 +1 · AI 提议、人确认</div>}
+      {card.status === "verifying" && (
+        <div className="verifying">
+          <div className="scan">📷</div>
+          <p><b>智能镜头核实中…</b></p>
+          <p className="hint">画面帧 → AI 复核 → 确认时长与动作</p>
+        </div>
+      )}
+      {card.status === "confirmed" && <div className="receipt done">✓ 已核实(画面证据已附) · 灯火 +1 · AI 提议、镜头核实、人确认</div>}
       {card.status === "skipped" && <div className="receipt quiet">已跳过,没有惩罚、没有连续打卡压力。</div>}
     </article>
   );

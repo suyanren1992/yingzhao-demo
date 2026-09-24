@@ -34,6 +34,10 @@ button.ghost, button.soft { background: transparent; border: 1.5px solid var(--l
 .receipt.done { border-style: solid; background: oklch(95% 0.05 85); }
 .receipt.quiet { border-color: var(--line); color: var(--ink-soft); font-size: .8rem; }
 .reveal b { color: var(--accent-deep); }
+.verify-note { font-size: .72rem; color: var(--accent-deep); background: oklch(95% 0.05 85); border-radius: 8px; padding: 6px 10px; }
+.verifying { text-align: center; padding: 18px 0; }
+.verifying .scan { font-size: 2rem; animation: scanPulse 1.1s ease-in-out infinite; }
+@keyframes scanPulse { 0%,100% { opacity: .45; transform: scale(1); } 50% { opacity: 1; transform: scale(1.12); } }
 .tl-item { display: flex; gap: 10px; padding: 10px 4px; border-bottom: 1px dashed var(--line); font-size: .88rem; }
 .ledger-entry { background: var(--night); color: var(--night-ink); border-radius: 12px; padding: 12px; margin-bottom: 10px; font-size: .78rem; }
 .ledger-entry .fact { font-size: .9rem; margin-bottom: 4px; }

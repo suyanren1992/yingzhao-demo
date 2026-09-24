@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>映照 · AI 看见生活，人看见彼此 —— 安克黑客松智能安防赛道</title>
+<meta name="description" content="映照：把 eufy 摄像头从看家工具变成家庭生活的记忆与经营系统。AI 发现事实，家人确认意义。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+    /* ========== 设计令牌（自带完整 :root，可独立运行） ========== */
+    :root {
+      /* 色彩 */
+      --bg: oklch(97.5% 0.012 85);
+      --ink: oklch(28% 0.02 60);
+      --ink-soft: oklch(45% 0.025 65);
+      --accent: oklch(72% 0.15 75);
+      --accent-deep: oklch(58% 0.16 70);
+      --surface: oklch(99% 0.008 80);
+      --surface-2: oklch(94% 0.015 82);
+      --night: oklch(22% 0.015 260);
+      --night-ink: oklch(92% 0.01 85);
+      --night-accent: oklch(78% 0.14 80);
+      --line: oklch(88% 0.01 80);
+      --glow: oklch(72% 0.15 75 / 0.25);
+
+      /* 间距 */
+      --space-3xs: 0.25rem;
+      --space-2xs: 0.5rem;
+      --space-xs: 0.75rem;
+      --space-sm: 1rem;
+      --space-md: 1.5rem;
+      --space-lg: 2rem;
+      --space-xl: 3rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* 圆角 */
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --radius-full: 9999px;
+
+      /* 阴影 */
+      --shadow-sm: 0 1px 3px oklch(28% 0.02 60 / 0.06);
+      --shadow-md: 0 4px 12px oklch(28% 0.02 60 / 0.08), 0 1px 3px oklch(28% 0.02 60 / 0.04);
+      --shadow-lg: 0 8px 24px oklch(28% 0.02 60 / 0.10), 0 2px 6px oklch(28% 0.02 60 / 0.05);
+      --shadow-glow: 0 0 24px var(--glow), 0 0 48px oklch(72% 0.15 75 / 0.12);
+      --shadow-night: 0 4px 16px oklch(0% 0 0 / 0.4);
+
+      /* 字体 */
+      --font-display: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+      --font-body: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      --font-mono: "SF Mono", "Cascadia Code", "Consolas", monospace;
+
+      /* 字号 */
+      --text-display: clamp(2.5rem, 6vw, 6rem);
+      --text-headline: clamp(1.75rem, 3.5vw, 3rem);
+      --text-title: clamp(1.25rem, 2vw, 1.5rem);
+      --text-body: clamp(1rem, 1.1vw, 1.125rem);
+      --text-small: 0.875rem;
+      --text-caption: 0.75rem;
+
+      /* 动效 */
+      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out-soft: cubic-bezier(0.45, 0, 0.15, 1);
+    }
+
+    /* ========== 全局重置（仅作用于本文件 section） ========== */
+    #hero, #layers, #philosophy {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: var(--font-body);
+      color: var(--ink);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    #hero *, #layers *, #philosophy * {
+      box-sizing: border-box;
+    }
+    #hero h1, #layers h2, #philosophy h2,
+    #hero h2, #layers h3, #philosophy h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      text-wrap: balance;
+      line-height: 1.15;
+      margin: 0;
+    }
+
+    /* ================================================================
+       SECTION 1 — HERO
+       ================================================================ */
+    #hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--space-3xl) var(--space-md);
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    /* 灯笼光晕 —— 中央偏下 radial-gradient */
+    #hero::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 58%;
+      transform: translate(-50%, -50%);
+      width: min(72vw, 560px);
+      height: min(72vw, 560px);
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        oklch(72% 0.15 75 / 0.22) 0%,
+        oklch(72% 0.15 75 / 0.10) 38%,
+        oklch(72% 0.15 75 / 0.04) 62%,
+        transparent 78%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* 底部微渐变，与下一区块衔接 */
+    #hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 灯火粒子画布 —— 在光晕之上、内容之下 */
+    #hero canvas.lantern-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    #hero .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 44rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    /* 队名徽章 */
+    #hero .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3xs);
+      padding: var(--space-2xs) var(--space-sm);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--line);
+      background: var(--surface);
+      font-size: var(--text-small);
+      color: var(--ink-soft);
+      letter-spacing: 0.08em;
+      font-weight: 500;
+    }
+    #hero .hero-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--glow);
+      flex-shrink: 0;
+    }
+
+    /* 主标题 */
+    #hero h1 {
+      font-size: var(--text-display);
+      color: var(--ink);
+    }
+    #hero h1 .accent-char {
+      color: var(--accent-deep);
+    }
+
+    /* 副标题 / 一句话定位 */
+    #hero .hero-sub {
+      font-size: var(--text-body);
+      color: var(--ink-soft);
+      max-width: 36rem;
+      margin: 0;
+      line-height: 1.8;
+    }
+
+    /* 一句话核心理念 */
+    #hero .hero-line {
+      font-family: var(--font-display);
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+      margin: 0;
+      padding: var(--space-xs) var(--space-lg);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: inline-block;
+    }
+    #hero .hero-line .sep {
+      color: var(--accent-deep);
+      margin: 0 var(--space-2xs);
+    }
+
+    /* CTA 按钮组 */
+    #hero .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      justify-content: center;
+      margin-top: var(--space-xs);
+    }
+    #hero .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3xs);
+      padding: var(--space-xs) var(--space-lg);
+      border-radius: var(--radius-full);
+      font-size: var(--text-body);
+      font-weight: 500;
+      text-decoration: none;
+      transition: transform 0.4s var(--ease-out-quart),
+                  box-shadow 0.4s var(--ease-out-quart),
+                  background 0.4s var(--ease-out-quart);
+      cursor: pointer;
+      border: none;
+      font-family: var(--font-body);
+    }
+    #hero .btn-primary {
+      background: var(--accent-deep);
+      color: oklch(99% 0.008 80);
+      box-shadow: var(--shadow-md);
+    }
+    #hero .btn-primary:hover {
+      background: oklch(52% 0.16 70);
+      box-shadow: var(--shadow-glow);
+      transform: translateY(-2px);
+    }
+    #hero .btn-secondary {
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+    }
+    #hero .btn-secondary:hover {
+      background: var(--surface-2);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    #hero .btn .arrow {
+      font-size: 0.9em;
+      transition: transform 0.4s var(--ease-out-quart);
+    }
+    #hero .btn:hover .arrow {
+      transform: translateY(2px);
+    }
+    #hero .btn-secondary:hover .arrow {
+      transform: translateX(3px);
+    }
+
+    /* 向下箭头指示器 */
+    #hero .scroll-hint {
+      position: absolute;
+      bottom: var(--space-lg);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-3xs);
+      color: var(--ink-soft);
+      font-size: var(--text-caption);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.4s var(--ease-out-quart);
+    }
+    #hero .scroll-hint:hover {
+      opacity: 1;
+    }
+    #hero .scroll-hint .arrow-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: hero-bounce 2.4s var(--ease-in-out-soft) infinite;
+      box-shadow: var(--shadow-sm);
+    }
+    #hero .scroll-hint svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--ink-soft);
+    }
+    @keyframes hero-bounce {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(6px); }
+    }
+
+    /* ================================================================
+       SECTION 2 — 三层安心
+       ================================================================ */
+    #layers {
+      position: relative;
+      padding: var(--space-3xl) var(--space-md);
+      background: var(--bg);
+    }
+    #layers .layers-inner {
+      max-width: 72rem;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xl);
+    }
+
+    /* 区块标题区 */
+    #layers .section-head {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+    #layers .section-head .eyebrow {
+      font-size: var(--text-small);
+      color: var(--accent-deep);
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    #layers .section-head h2 {
+      font-size: var(--text-headline);
+      color: var(--ink);
+    }
+    #layers .section-head .lead {
+      font-size: var(--text-body);
+      color: var(--ink-soft);
+      max-width: 38rem;
+      margin: 0;
+      line-height: 1.8;
+    }
+
+    /* 三列布局 */
+    #layers .layers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+    }
+    @media (max-width: 768px) {
+      #layers .layers-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 单层卡片 —— 视觉递进：灰调 → 微亮 → 灯火高亮 */
+    #layers .layer-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--space-sm);
+      transition: transform 0.5s var(--ease-out-quart),
+                  box-shadow 0.5s var(--ease-out-quart);
+    }
+    #layers .layer-card:hover {
+      transform: translateY(-4px);
+    }
+
+    /* 第一层：灰调 */
+    #layers .layer-card[data-layer="1"] {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+    }
+    #layers .layer-card[data-layer="1"]:hover {
+      box-shadow: var(--shadow-md);
+    }
+    #layers .layer-card[data-layer="1"] .layer-icon {
+      background: oklch(88% 0.01 80);
+      color: var(--ink-soft);
+    }
+
+    /* 第二层：微亮 */
+    #layers .layer-card[data-layer="2"] {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+    }
+    #layers .layer-card[data-layer="2"]:hover {
+      box-shadow: var(--shadow-lg);
+    }
+    #layers .layer-card[data-layer="2"] .layer-icon {
+      background: oklch(94% 0.03 80);
+      color: var(--accent-deep);
+    }
+
+    /* 第三层：灯火高亮 */
+    #layers .layer-card[data-layer="3"] {
+      background: var(--surface);
+      border: 1.5px solid var(--accent);
+      box-shadow: var(--shadow-glow), var(--shadow-md);
+    }
+    #layers .layer-card[data-layer="3"]:hover {
+      box-shadow: var(--shadow-glow), var(--shadow-lg);
+      transform: translateY(-6px);
+    }
+    #layers .layer-card[data-layer="3"] .layer-icon {
+      background: var(--accent);
+      color: oklch(99% 0.008 80);
+      box-shadow: 0 0 16px var(--glow);
+    }
+    #layers .layer-card[data-layer="3"] .layer-tag {
+      background: var(--accent-deep);
+      color: oklch(99% 0.008 80);
+    }
+
+    /* 层级标签 */
+    #layers .layer-tag {
+      display: inline-block;
+      padding: var(--space-3xs) var(--space-xs);
+      border-radius: var(--radius-full);
+      font-size: var(--text-caption);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      background: var(--surface-2);
+      color: var(--ink-soft);
+      border: 1px solid var(--line);
+    }
+
+    /* 圆形图标 */
+    #layers .layer-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.5s var(--ease-out-quart);
+    }
+    #layers .layer-card:hover .layer-icon {
+      transform: scale(1.08);
+    }
+    #layers .layer-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* 卡片文字 */
+    #layers .layer-card h3 {
+      font-size: var(--text-title);
+      color: var(--ink);
+    }
+    #layers .layer-card .layer-desc {
+      font-size: var(--text-body);
+      color: var(--ink-soft);
+      margin: 0;
+      line-height: 1.75;
+    }
+    #layers .layer-card .layer-note {
+      font-size: var(--text-small);
+      color: var(--ink-soft);
+      margin: 0;
+      padding-top: var(--space-xs);
+      border-top: 1px dashed var(--line);
+      width: 100%;
+    }
+    #layers .layer-card[data-layer="3"] .layer-note {
+      border-top-color: oklch(72% 0.15 75 / 0.35);
+      color: var(--accent-deep);
+      font-weight: 500;
+    }
+
+    /* 结语横条 */
+    #layers .layers-closing {
+      text-align: center;
+      padding: var(--space-lg) var(--space-xl);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+    }
+    #layers .layers-closing p {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0;
+      letter-spacing: 0.01em;
+      text-wrap: balance;
+      line-height: 1.5;
+    }
+    #layers .layers-closing .highlight {
+      color: var(--accent-deep);
+    }
+
+    /* ================================================================
+       SECTION 3 — 产品哲学
+       ================================================================ */
+    #philosophy {
+      position: relative;
+      padding: var(--space-3xl) var(--space-md);
+      background: linear-gradient(to bottom, var(--bg), var(--surface-2) 30%, var(--surface-2) 70%, var(--bg));
+    }
+    #philosophy .philosophy-inner {
+      max-width: 72rem;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xl);
+    }
+
+    /* 区块标题 */
+    #philosophy .section-head {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+    #philosophy .section-head .eyebrow {
+      font-size: var(--text-small);
+      color: var(--accent-deep);
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    #philosophy .section-head h2 {
+      font-size: var(--text-headline);
+      color: var(--ink);
+    }
+    #philosophy .section-head .lead {
+      font-size: var(--text-body);
+      color: var(--ink-soft);
+      max-width: 40rem;
+      margin: 0;
+      line-height: 1.8;
+    }
+
+    /* —— 眼睛 vs 镜子 对比 —— */
+    #philosophy .vs-wrap {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: stretch;
+      gap: var(--space-md);
+    }
+    @media (max-width: 700px) {
+      #philosophy .vs-wrap {
+        grid-template-columns: 1fr;
+      }
+      #philosophy .vs-divider {
+        display: none;
+      }
+    }
+
+    /* 左侧：眼睛（深色、冷、斜线） */
+    #philosophy .vs-panel {
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      position: relative;
+      overflow: hidden;
+    }
+    #philosophy .vs-panel[data-side="eye"] {
+      background: var(--night);
+      box-shadow: var(--shadow-night);
+    }
+    /* 斜线纹理 */
+    #philosophy .vs-panel[data-side="eye"]::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 12px,
+        oklch(92% 0.01 85 / 0.03) 12px,
+        oklch(92% 0.01 85 / 0.03) 13px
+      );
+      pointer-events: none;
+    }
+    #philosophy .vs-panel[data-side="eye"] h3 {
+      color: var(--night-ink);
+    }
+    #philosophy .vs-panel[data-side="eye"] .vs-desc {
+      color: oklch(75% 0.015 85);
+    }
+    #philosophy .vs-panel[data-side="eye"] .vs-icon {
+      background: oklch(30% 0.02 260);
+      color: oklch(70% 0.03 260);
+      border: 1px solid oklch(35% 0.02 260);
+    }
+
+    /* 右侧：镜子（暖光、圆润） */
+    #philosophy .vs-panel[data-side="mirror"] {
+      background: var(--surface);
+      border: 1.5px solid var(--accent);
+      box-shadow: var(--shadow-glow), var(--shadow-md);
+    }
+    #philosophy .vs-panel[data-side="mirror"] h3 {
+      color: var(--ink);
+    }
+    #philosophy .vs-panel[data-side="mirror"] .vs-desc {
+      color: var(--ink-soft);
+    }
+    #philosophy .vs-panel[data-side="mirror"] .vs-icon {
+      background: var(--accent);
+      color: oklch(99% 0.008 80);
+      box-shadow: 0 0 20px var(--glow);
+    }
+
+    /* 对比面板公共 */
+    #philosophy .vs-panel .vs-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    #philosophy .vs-panel .vs-icon svg {
+      width: 26px;
+      height: 26px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    #philosophy .vs-panel h3 {
+      font-size: var(--text-title);
+      margin: 0;
+    }
+    #philosophy .vs-panel .vs-desc {
+      font-size: var(--text-body);
+      margin: 0;
+      line-height: 1.75;
+    }
+    #philosophy .vs-panel .vs-label {
+      font-size: var(--text-caption);
+      letter-spacing: 0.12em;
+      font-weight: 500;
+      opacity: 0.7;
+      text-transform: uppercase;
+    }
+    #philosophy .vs-panel[data-side="eye"] .vs-label {
+      color: var(--night-ink);
+    }
+    #philosophy .vs-panel[data-side="mirror"] .vs-label {
+      color: var(--accent-deep);
+    }
+
+    /* VS 分隔 */
+    #philosophy .vs-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #philosophy .vs-divider .vs-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      letter-spacing: 0.04em;
+    }
+
+    /* —— AI 发现事实，人确认意义 —— */
+    #philosophy .ai-human {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+      padding: var(--space-lg) var(--space-xl);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+    }
+    #philosophy .ai-human .ah-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 600;
+    }
+    #philosophy .ai-human .ah-item[data-role="ai"] {
+      color: var(--ink-soft);
+    }
+    #philosophy .ai-human .ah-item[data-role="human"] {
+      color: var(--accent-deep);
+    }
+    #philosophy .ai-human .ah-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    #philosophy .ai-human .ah-item[data-role="ai"] .ah-icon {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      color: var(--ink-soft);
+    }
+    #philosophy .ai-human .ah-item[data-role="human"] .ah-icon {
+      background: var(--accent);
+      color: oklch(99% 0.008 80);
+      box-shadow: 0 0 12px var(--glow);
+    }
+    #philosophy .ai-human .ah-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    #philosophy .ai-human .ah-sep {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--line);
+      font-weight: 300;
+    }
+    #philosophy .ai-human .ah-note {
+      width: 100%;
+      text-align: center;
+      font-size: var(--text-small);
+      color: var(--ink-soft);
+      margin: 0;
+      padding-top: var(--space-xs);
+      border-top: 1px dashed var(--line);
+    }
+
+    /* —— 四见 2×2 网格 —— */
+    #philosophy .four-see {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-md);
+    }
+    @media (max-width: 600px) {
+      #philosophy .four-see {
+        grid-template-columns: 1fr;
+      }
+    }
+    #philosophy .see-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: var(--space-lg);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.4s var(--ease-out-quart),
+                  box-shadow 0.4s var(--ease-out-quart);
+    }
+    #philosophy .see-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    #philosophy .see-item .see-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-full);
+      background: oklch(94% 0.03 80);
+      color: var(--accent-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    #philosophy .see-item .see-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    #philosophy .see-item .see-text h3 {
+      font-size: var(--text-title);
+      color: var(--ink);
+      margin: 0 0 var(--space-3xs) 0;
+    }
+    #philosophy .see-item .see-text p {
+      font-size: var(--text-small);
+      color: var(--ink-soft);
+      margin: 0;
+      line-height: 1.65;
+    }
+
+    /* —— 金句收尾 —— */
+    #philosophy .philosophy-quote {
+      text-align: center;
+      padding: var(--space-xl) var(--space-lg);
+    }
+    #philosophy .philosophy-quote blockquote {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 3.2vw, 2.4rem);
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0;
+      letter-spacing: -0.02em;
+      text-wrap: balance;
+      line-height: 1.4;
+    }
+    #philosophy .philosophy-quote blockquote .accent {
+      color: var(--accent-deep);
+    }
+    #philosophy .philosophy-quote cite {
+      display: block;
+      margin-top: var(--space-sm);
+      font-size: var(--text-small);
+      color: var(--ink-soft);
+      font-style: normal;
+      letter-spacing: 0.06em;
+    }
+
+    /* ================================================================
+       滚动 Reveal —— JS 增强，不门控内容
+       ================================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s var(--ease-out-quart),
+                  transform 0.6s var(--ease-out-quart);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* stagger 子元素延迟 */
+    #layers .layers-grid .layer-card.reveal {
+      transition-delay: calc(var(--stagger-index, 0) * 80ms);
+    }
+    #philosophy .four-see .see-item.reveal {
+      transition-delay: calc(var(--stagger-index, 0) * 70ms);
+    }
+
+    /* ================================================================
+       prefers-reduced-motion 降级
+       ================================================================ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      #hero .scroll-hint .arrow-circle {
+        animation: none !important;
+      }
+    }
+  
+/* ====== partB ====== */
+
+
+#cards { margin:0; padding:var(--space-3xl) var(--space-lg); font-family:var(--font-body); color:var(--ink); line-height:1.7; background:var(--bg); }
+#cards * { box-sizing:border-box; }
+#cards h2 { font-family:var(--font-display); font-weight:700; letter-spacing:-0.04em; text-wrap:balance; font-size:var(--text-headline); margin:0 0 var(--space-sm); }
+#cards .cards-lead { max-width:68ch; color:var(--ink-soft); font-size:var(--text-body); margin:0 0 var(--space-xl); }
+#cards .cards-wrap { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:var(--space-lg); max-width:1200px; margin:0 auto; }
+#cards .demo-card { background:var(--surface); border-radius:var(--radius-lg); padding:var(--space-lg); box-shadow:var(--shadow-md); display:flex; flex-direction:column; gap:var(--space-md); min-height:480px; position:relative; overflow:hidden; }
+#cards .demo-card::before { content:""; position:absolute; inset:0 0 auto 0; height:6px; background:linear-gradient(90deg,var(--accent),transparent); opacity:.7; }
+#cards .demo-title { font-family:var(--font-display); font-size:var(--text-title); font-weight:700; margin:0; display:flex; align-items:center; gap:var(--space-2xs); }
+#cards .demo-stage { flex:1; display:flex; flex-direction:column; justify-content:center; gap:var(--space-md); background:var(--surface-2); border-radius:var(--radius-md); padding:var(--space-md); position:relative; }
+#cards .tag { display:inline-block; font-size:var(--text-caption); padding:2px 10px; border-radius:var(--radius-full); background:var(--accent); color:var(--ink); font-weight:600; width:fit-content; }
+#cards .anon-card { background:var(--surface); border-radius:var(--radius-md); padding:var(--space-md); box-shadow:var(--shadow-sm); border:1px solid var(--line); text-align:center; }
+#cards .anon-card .who { font-family:var(--font-display); font-size:var(--text-title); margin:var(--space-2xs) 0; }
+#cards .btn-row { display:flex; flex-wrap:wrap; gap:var(--space-2xs); justify-content:center; }
+#cards button { font-family:var(--font-body); font-size:var(--text-small); border:none; cursor:pointer; border-radius:var(--radius-full); padding:10px 18px; background:var(--accent); color:var(--ink); font-weight:600; transition:transform .35s var(--ease-out-quart), box-shadow .35s var(--ease-out-quart), background .2s; }
+#cards button:hover { transform:translateY(-2px); box-shadow:var(--shadow-glow); }
+#cards button.ghost { background:transparent; border:1.5px solid var(--line); color:var(--ink-soft); }
+#cards button.ghost:hover { border-color:var(--accent); color:var(--ink); box-shadow:none; }
+#cards button:disabled { opacity:.45; cursor:not-allowed; transform:none; box-shadow:none; }
+#cards .comic { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+#cards .comic .frame { aspect-ratio:4/3; border-radius:var(--radius-sm); background:linear-gradient(160deg,oklch(88% 0.06 80),oklch(80% 0.09 75)); position:relative; overflow:hidden; }
+#cards .comic .frame::after { content:attr(data-emoji); position:absolute; inset:0; display:grid; place-items:center; font-size:2rem; }
+#cards .comic .frame:nth-child(2) { background:linear-gradient(160deg,oklch(85% 0.08 70),oklch(76% 0.11 65)); }
+#cards .comic .frame:nth-child(3) { background:linear-gradient(160deg,oklch(90% 0.05 90),oklch(82% 0.08 85)); }
+#cards .comic .frame:nth-child(4) { background:linear-gradient(160deg,oklch(87% 0.07 60),oklch(78% 0.10 55)); }
+#cards .reveal-name { text-align:center; font-family:var(--font-display); font-size:var(--text-title); }
+#cards .reveal-name b { color:var(--accent-deep); }
+#cards .reply-options { display:flex; flex-wrap:wrap; gap:var(--space-2xs); justify-content:center; }
+#cards .reply-pick { background:var(--surface); border:1.5px solid var(--line); border-radius:var(--radius-full); padding:8px 16px; font-size:var(--text-small); cursor:pointer; transition:all .3s var(--ease-out-quart); }
+#cards .reply-pick:hover, #cards .reply-pick.sel { border-color:var(--accent); background:var(--accent); }
+#cards .receipt { text-align:center; padding:var(--space-md); border-radius:var(--radius-md); background:var(--surface); border:1px dashed var(--accent); }
+#cards .receipt .heart { font-size:1.6rem; display:block; margin-bottom:var(--space-2xs); }
+#cards .task-face { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:var(--space-lg); text-align:center; box-shadow:var(--shadow-sm); }
+#cards .task-face .q { font-family:var(--font-display); font-size:var(--text-title); margin:var(--space-xs) 0; }
+#cards .flame { display:inline-block; width:22px; height:22px; border-radius:50% 50% 50% 0; background:radial-gradient(circle at 60% 35%, oklch(85% 0.15 80), var(--accent-deep)); transform:rotate(-45deg); box-shadow:0 0 12px var(--glow); }
+#cards .light-count { font-family:var(--font-display); font-size:1.4rem; font-weight:700; color:var(--accent-deep); }
+#cards .wujian-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:var(--space-md); text-align:center; }
+#cards .wujian-card .fact { font-size:var(--text-body); margin:var(--space-sm) 0; }
+#cards .wujian-card .fact b { color:var(--accent-deep); }
+#cards .yn-row { display:flex; gap:var(--space-sm); justify-content:center; margin-top:var(--space-sm); }
+#cards .yn-row button { min-width:88px; }
+#cards .ledger-drop { margin-top:var(--space-sm); padding:var(--space-sm); border-radius:var(--radius-sm); background:var(--night); color:var(--night-ink); font-family:var(--font-mono); font-size:var(--text-caption); text-align:left; word-break:break-all; opacity:0; transform:translateY(8px); transition:opacity .6s var(--ease-out-quart), transform .6s var(--ease-out-quart); }
+#cards .ledger-drop.show { opacity:1; transform:none; }
+#cards .hint { font-size:var(--text-caption); color:var(--ink-soft); text-align:center; min-height:1.2em; margin:0; }
+#cards .fade-swap { transition:opacity .4s var(--ease-out-quart), transform .4s var(--ease-out-quart); }
+#cards .fade-swap.out { opacity:0; transform:translateY(10px); }
+#ceremony { margin:0; padding:0 var(--space-lg) var(--space-3xl); font-family:var(--font-body); background:var(--bg); color:var(--ink); }
+#ceremony * { box-sizing:border-box; }
+#ceremony .ceremony-inner { max-width:1200px; margin:0 auto; background:var(--surface); border-radius:var(--radius-xl); padding:var(--space-xl); box-shadow:var(--shadow-md); }
+#ceremony h2 { font-family:var(--font-display); font-size:var(--text-headline); letter-spacing:-0.04em; text-wrap:balance; margin:0 0 var(--space-lg); }
+#ceremony .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:var(--space-md); counter-reset:step; }
+#ceremony .step { position:relative; padding:var(--space-md) var(--space-sm) var(--space-sm); border-radius:var(--radius-md); background:var(--surface-2); text-align:center; }
+#ceremony .step::before { counter-increment:step; content:counter(step); display:grid; place-items:center; width:34px; height:34px; margin:0 auto var(--space-2xs); border-radius:50%; background:var(--accent); font-weight:700; font-family:var(--font-display); }
+#ceremony .step b { display:block; font-size:var(--text-small); margin-bottom:2px; }
+#ceremony .step span { font-size:var(--text-caption); color:var(--ink-soft); }
+@media (prefers-reduced-motion: reduce) {
+  #cards *, #ceremony * { transition:none !important; animation:none !important; }
+}
+
+/* ====== partC ====== */
+
+
+#genesis { margin:0; padding:var(--space-3xl) var(--space-lg); font-family:var(--font-body); color:var(--ink); line-height:1.7; background:var(--bg); }
+#genesis * { box-sizing:border-box; }
+#genesis .genesis-inner { max-width:1000px; margin:0 auto; text-align:center; }
+#genesis h2 { font-family:var(--font-display); font-size:var(--text-headline); letter-spacing:-0.04em; text-wrap:balance; margin:0 0 var(--space-sm); }
+#genesis .lead { color:var(--ink-soft); max-width:60ch; margin:0 auto var(--space-xl); }
+#genesis .hands { display:flex; flex-wrap:wrap; gap:var(--space-md); justify-content:center; margin-bottom:var(--space-lg); }
+#genesis .hand { background:var(--surface); border:2px solid var(--line); border-radius:var(--radius-lg); padding:var(--space-md) var(--space-lg); cursor:pointer; transition:all .4s var(--ease-out-quart); min-width:120px; }
+#genesis .hand:hover { transform:translateY(-3px); box-shadow:var(--shadow-md); }
+#genesis .hand.joined { border-color:var(--accent); background:var(--accent); box-shadow:var(--shadow-glow); }
+#genesis .hand .who { font-family:var(--font-display); font-weight:700; font-size:var(--text-title); }
+#genesis .hand .st { font-size:var(--text-caption); color:var(--ink-soft); }
+#genesis .hand.joined .st { color:var(--ink); }
+#genesis .genesis-block { display:none; margin:var(--space-lg) auto 0; max-width:560px; background:var(--night); color:var(--night-ink); border-radius:var(--radius-lg); padding:var(--space-lg); text-align:left; font-family:var(--font-mono); font-size:var(--text-small); box-shadow:var(--shadow-night); position:relative; overflow:hidden; }
+#genesis .genesis-block.show { display:block; animation:genesisIn .8s var(--ease-out-expo); }
+#genesis .genesis-block::before { content:""; position:absolute; top:-40%; left:-20%; width:60%; height:180%; background:radial-gradient(closest-side, oklch(78% 0.14 80 / .18), transparent); pointer-events:none; }
+#genesis .genesis-block .gb-title { color:var(--night-accent); font-weight:700; margin-bottom:var(--space-sm); }
+#genesis .genesis-block .row { margin:4px 0; word-break:break-all; }
+@keyframes genesisIn { from { opacity:0; transform:translateY(16px) scale(.98); } to { opacity:1; transform:none; } }
+#ledger { margin:0; padding:var(--space-3xl) var(--space-lg); font-family:var(--font-body); background:var(--night); color:var(--night-ink); line-height:1.7; }
+#ledger * { box-sizing:border-box; }
+#ledger .ledger-inner { max-width:1000px; margin:0 auto; }
+#ledger h2 { font-family:var(--font-display); font-size:var(--text-headline); letter-spacing:-0.04em; text-wrap:balance; margin:0 0 var(--space-sm); color:var(--night-ink); }
+#ledger .lead { color:oklch(80% 0.02 85); max-width:62ch; margin:0 0 var(--space-xl); }
+#ledger .chain { display:flex; flex-direction:column; gap:var(--space-sm); }
+#ledger .entry { background:oklch(28% 0.02 260); border:1px solid oklch(35% 0.02 260); border-radius:var(--radius-md); padding:var(--space-md); font-family:var(--font-mono); font-size:var(--text-small); }
+#ledger .entry .e-fact { font-family:var(--font-body); font-size:var(--text-body); margin-bottom:6px; }
+#ledger .entry .e-meta { font-size:var(--text-caption); color:oklch(75% 0.02 85); display:flex; flex-wrap:wrap; gap:var(--space-sm); }
+#ledger .entry .e-hash { color:var(--night-accent); word-break:break-all; }
+#ledger .entry .e-link::before { content:"↳ prev: "; color:oklch(65% 0.02 85); }
+#ledger button { margin-top:var(--space-md); font-family:var(--font-body); font-size:var(--text-small); border:none; cursor:pointer; border-radius:var(--radius-full); padding:10px 20px; background:var(--night-accent); color:var(--night); font-weight:700; transition:transform .35s var(--ease-out-quart); }
+#ledger button:hover { transform:translateY(-2px); }
+#care { margin:0; padding:var(--space-3xl) var(--space-lg); font-family:var(--font-body); color:var(--ink); line-height:1.7; background:var(--bg); }
+#care * { box-sizing:border-box; }
+#care h2 { font-family:var(--font-display); font-size:var(--text-headline); letter-spacing:-0.04em; text-wrap:balance; margin:0 0 var(--space-sm); }
+#care .lead { color:var(--ink-soft); max-width:62ch; margin:0 0 var(--space-xl); }
+#care .care-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:var(--space-lg); max-width:1100px; margin:0 auto; }
+#care .care-card { background:var(--surface); border-radius:var(--radius-lg); padding:var(--space-lg); box-shadow:var(--shadow-md); border-top:6px solid var(--accent); }
+#care .care-card h3 { font-family:var(--font-display); font-size:var(--text-title); margin:0 0 var(--space-sm); }
+#care .signal { background:var(--surface-2); border-radius:var(--radius-md); padding:var(--space-md); margin-top:var(--space-sm); }
+#care .signal .s-title { font-size:var(--text-caption); font-weight:700; color:var(--accent-deep); margin-bottom:4px; }
+#care .signal p { margin:0; font-size:var(--text-small); }
+#care .note { font-size:var(--text-caption); color:var(--ink-soft); margin-top:var(--space-sm); }
+#boundaries { margin:0; padding:var(--space-3xl) var(--space-lg); font-family:var(--font-body); color:var(--ink); line-height:1.7; background:var(--surface-2); }
+#boundaries * { box-sizing:border-box; }
+#boundaries .b-inner { max-width:1000px; margin:0 auto; }
+#boundaries h2 { font-family:var(--font-display); font-size:var(--text-headline); letter-spacing:-0.04em; text-wrap:balance; margin:0 0 var(--space-sm); }
+#boundaries .lead { color:var(--ink-soft); max-width:62ch; margin:0 0 var(--space-lg); }
+#boundaries .b-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:var(--space-md); }
+#boundaries .b-item { background:var(--surface); border-radius:var(--radius-md); padding:var(--space-md); border-left:5px solid oklch(55% 0.12 30); }
+#boundaries .b-item b { display:block; margin-bottom:4px; font-size:var(--text-small); }
+#boundaries .b-item span { font-size:var(--text-caption); color:var(--ink-soft); }
+#team { margin:0; padding:var(--space-3xl) var(--space-lg); font-family:var(--font-body); color:var(--ink); line-height:1.7; background:var(--bg); text-align:center; }
+#team * { box-sizing:border-box; }
+#team h2 { font-family:var(--font-display); font-size:var(--text-headline); letter-spacing:-0.04em; margin:0 0 var(--space-lg); }
+#team .members { display:flex; flex-wrap:wrap; gap:var(--space-lg); justify-content:center; }
+#team .member { background:var(--surface); border-radius:var(--radius-lg); padding:var(--space-lg) var(--space-xl); box-shadow:var(--shadow-md); min-width:240px; }
+#team .member .avatar { width:64px; height:64px; margin:0 auto var(--space-sm); border-radius:50%; background:linear-gradient(140deg,var(--accent),var(--accent-deep)); display:grid; place-items:center; font-size:1.6rem; box-shadow:var(--shadow-glow); }
+#team .member b { font-family:var(--font-display); font-size:var(--text-title); display:block; }
+#team .member span { font-size:var(--text-small); color:var(--ink-soft); }
+#team .team-note { margin-top:var(--space-lg); color:var(--ink-soft); font-size:var(--text-small); max-width:64ch; margin-left:auto; margin-right:auto; }
+#footer { margin:0; padding:var(--space-2xl) var(--space-lg); font-family:var(--font-body); background:var(--night); color:var(--night-ink); text-align:center; line-height:1.7; }
+#footer * { box-sizing:border-box; }
+#footer .slogan { font-family:var(--font-display); font-size:var(--text-headline); letter-spacing:-0.04em; text-wrap:balance; margin:0 0 var(--space-sm); }
+#footer .slogan em { color:var(--night-accent); font-style:normal; }
+#footer .sub { color:oklch(80% 0.02 85); font-size:var(--text-small); margin:0; }
+@media (prefers-reduced-motion: reduce) {
+  #genesis *, #ledger *, #care *, #boundaries *, #team *, #footer * { transition:none !important; animation:none !important; }
+}
+
+</style>
+</head>
+<body>
+<nav id="topnav" aria-label="页面导航"><a class="brand" href="#hero">映照</a><div class="links"><a href="#philosophy">哲学</a><a href="#cards">三卡演示</a><a href="#genesis">开局仪式</a><a href="#ledger">账本</a><a href="#care">关怀</a><a href="#team">团队</a></div></nav>
+<style>
+#topnav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px clamp(16px,4vw,48px);background:oklch(97.5% 0.012 85 / .82);backdrop-filter:blur(12px);border-bottom:1px solid oklch(88% 0.01 80 / .6);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+#topnav .brand{font-family:"Noto Serif SC",serif;font-weight:700;font-size:1.15rem;color:oklch(28% 0.02 60);text-decoration:none;letter-spacing:-0.02em}
+#topnav .links{display:flex;gap:clamp(10px,2vw,22px)}
+#topnav .links a{color:oklch(45% 0.025 65);text-decoration:none;font-size:.85rem;transition:color .25s}
+#topnav .links a:hover{color:oklch(58% 0.16 70)}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:oklch(97.5% 0.012 85)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+<section id="hero" aria-label="首屏">
+    <canvas id="lantern-canvas" class="lantern-canvas" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="dot" aria-hidden="true"></span>
+        黑客松参赛队 · 映照
+      </div>
+
+      <h1>「<span class="accent-char">映照</span>」<br>让家，彼此照见</h1>
+
+      <p class="hero-sub">
+        把家庭摄像头从"看家工具"变成"家庭生活的记忆与经营系统"。<br>
+        每一条记录都有证据、经本人确认、不可篡改——彼此照见，越照越真。
+      </p>
+
+      <p class="hero-line">
+        AI 发现事实<span class="sep">·</span>家人确认意义
+      </p>
+
+      <div class="hero-cta">
+        <a href="#philosophy" class="btn btn-primary">
+          查看产品哲学
+          <span class="arrow" aria-hidden="true">↓</span>
+        </a>
+        <a href="#cards" class="btn btn-secondary">
+          体验三卡演示
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <a href="#layers" class="scroll-hint" aria-label="向下滚动查看三层安心">
+      <div class="arrow-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+      </div>
+      向下探索
+    </a>
+  </section>
+<section id="layers" aria-label="三层安心">
+    <div class="layers-inner">
+
+      <div class="section-head">
+        <span class="eyebrow">Three Layers of Peace</span>
+        <h2>安心，有三层</h2>
+        <p class="lead">
+          传统安防解决了第一层，却停在第一层。映照想补齐的，是后面两层——它们 quieter，却同样真实。
+        </p>
+      </div>
+
+      <div class="layers-grid">
+
+        <!-- 第一层：安全的安心 -->
+        <article class="layer-card" data-layer="1">
+          <div class="layer-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <span class="layer-tag">第一层</span>
+          <h3>安全的安心</h3>
+          <p class="layer-desc">
+            没有危险。入侵检测、跌倒报警、异常提醒——传统安防已经做得很好，这层不需要重做。
+          </p>
+          <p class="layer-note">✓ 已被传统安防覆盖</p>
+        </article>
+
+        <!-- 第二层：关系的安心 -->
+        <article class="layer-card" data-layer="2">
+          <div class="layer-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <span class="layer-tag">第二层</span>
+          <h3>关系的安心</h3>
+          <p class="layer-desc">
+            我的付出有人看见，这个家在往好的方向走。这层至今是空白——家人每天的忙碌，几乎从未被彼此注意到。
+          </p>
+          <p class="layer-note">◌ 映照要补上的第一层空白</p>
+        </article>
+
+        <!-- 第三层：意志的安心（重点） -->
+        <article class="layer-card" data-layer="3">
+          <div class="layer-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2v4"/>
+              <path d="M12 18v4"/>
+              <path d="M4.93 4.93l2.83 2.83"/>
+              <path d="M16.24 16.24l2.83 2.83"/>
+              <path d="M2 12h4"/>
+              <path d="M18 12h4"/>
+              <path d="M4.93 19.07l2.83-2.83"/>
+              <path d="M16.24 7.76l2.83-2.83"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <span class="layer-tag">第三层 · 映照的重点</span>
+          <h3>意志的安心</h3>
+          <p class="layer-desc">
+            不被胁迫。没有"不得不"，没有内疚设计，永不把爱变成债。系统不控制用户，也不提供家人之间互相控制的工具。
+          </p>
+          <p class="layer-note">★ 连用户自己都很少说出口，却是所有家庭产品的隐性痛点</p>
+        </article>
+
+      </div>
+
+      <div class="layers-closing">
+        <p>
+          家庭不只需要被保护，还需要被<span class="highlight">经营</span>。
+        </p>
+      </div>
+
+    </div>
+  </section>
+<section id="philosophy" aria-label="产品哲学">
+    <div class="philosophy-inner">
+
+      <div class="section-head">
+        <span class="eyebrow">Product Philosophy</span>
+        <h2>摄像头不是眼睛，是镜子</h2>
+        <p class="lead">
+          别的安防产品替你看家，映照替你们照见彼此。AI 承担所有没有人情味的劳动，把所有有意义的表达留给人。
+        </p>
+      </div>
+
+      <!-- 眼睛 vs 镜子 -->
+      <div class="vs-wrap">
+        <div class="vs-panel" data-side="eye">
+          <div class="vs-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+              <line x1="4" y1="4" x2="20" y2="20"/>
+            </svg>
+          </div>
+          <span class="vs-label">眼睛 · 监视</span>
+          <h3>替你看家</h3>
+          <p class="vs-desc">
+            眼睛是监视——它向外搜寻异常，替你盯着家人。被看的人感到的是"被监控"，看的人得到的是焦虑，不是安心。
+          </p>
+        </div>
+
+        <div class="vs-divider" aria-hidden="true">
+          <div class="vs-circle">VS</div>
+        </div>
+
+        <div class="vs-panel" data-side="mirror">
+          <div class="vs-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="12" r="6"/>
+              <circle cx="12" cy="12" r="2"/>
+            </svg>
+          </div>
+          <span class="vs-label">镜子 · 映照</span>
+          <h3>照见彼此</h3>
+          <p class="vs-desc">
+            镜子是映照——它不评判、不催促，只是把已经发生的美好如实反射回来，让家人自己看见彼此。
+          </p>
+        </div>
+      </div>
+
+      <!-- AI 发现事实，人确认意义 -->
+      <div class="ai-human">
+        <div class="ah-item" data-role="ai">
+          <div class="ah-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="4" y="4" width="16" height="16" rx="2"/>
+              <rect x="9" y="9" width="6" height="6"/>
+              <line x1="9" y1="1" x2="9" y2="4"/>
+              <line x1="15" y1="1" x2="15" y2="4"/>
+              <line x1="9" y1="20" x2="9" y2="23"/>
+              <line x1="15" y1="20" x2="15" y2="23"/>
+              <line x1="20" y1="9" x2="23" y2="9"/>
+              <line x1="20" y1="14" x2="23" y2="14"/>
+              <line x1="1" y1="9" x2="4" y2="9"/>
+              <line x1="1" y1="14" x2="4" y2="14"/>
+            </svg>
+          </div>
+          AI 发现事实
+        </div>
+        <div class="ah-sep" aria-hidden="true">→</div>
+        <div class="ah-item" data-role="human">
+          <div class="ah-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          人确认意义
+        </div>
+        <p class="ah-note">
+          系统只呈现事实，永远不替人表达——"辛苦了"三个字，必须由家人自己按出来。
+        </p>
+      </div>
+
+      <!-- 四见 -->
+      <div class="four-see">
+
+        <div class="see-item">
+          <div class="see-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <div class="see-text">
+            <h3>见自己</h3>
+            <p>一篇随确认不断生长的"个人文章"——你确认过的每一事实，都成为 AI 理解你的基础。</p>
+          </div>
+        </div>
+
+        <div class="see-item">
+          <div class="see-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div class="see-text">
+            <h3>见家人</h3>
+            <p>家人的文章——那些每天发生却从未被注意的付出，由本人确认后成为家庭共识。</p>
+          </div>
+        </div>
+
+        <div class="see-item">
+          <div class="see-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <div class="see-text">
+            <h3>见关系</h3>
+            <p>关系的故事——每一次彼此看见、每一次回应与确认，编织成家庭共同的关系叙事。</p>
+          </div>
+        </div>
+
+        <div class="see-item">
+          <div class="see-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+          </div>
+          <div class="see-text">
+            <h3>见物品</h3>
+            <p>物品的履历——从买入那一刻起的完整追踪，每一件重要物品都被温柔地记住。</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 金句收尾 -->
+      <div class="philosophy-quote">
+        <blockquote>
+          照见有两面——<br>
+          <span class="accent">照见家人，也照见自己。</span>
+        </blockquote>
+        <cite>队名"映照"，由此而来。</cite>
+      </div>
+
+    </div>
+  </section>
+<section id="cards" aria-label="三卡互动演示">
+  <h2>三张卡，三种照见</h2>
+  <p class="cards-lead">生活抽卡是映照的日常入口：每天 1–3 张，共享统一打扰预算。下面三张卡都可以真实点按——体验"被发现、被惦记、照见自己"的过程。</p>
+  <div class="cards-wrap">
+    <div class="demo-card" id="demo-moment">
+      <p class="demo-title">🕯️ 时刻卡 <span class="tag">已发生的美好</span></p>
+      <div class="demo-stage">
+        <div class="fade-swap" id="moment-stage">
+          <div class="anon-card">
+            <p class="who">刚刚，厨房里有人忙了一会儿</p>
+            <p style="font-size:var(--text-caption);color:var(--ink-soft);margin:0;">📷 18:32 · 忙碌了 42 分钟 · 四证据帧复核通过</p>
+          </div>
+          <p class="hint">猜猜是谁？也可以直接揭开</p>
+          <div class="btn-row" id="guess-row">
+            <button data-guess="爸爸">爸爸</button>
+            <button data-guess="妈妈">妈妈</button>
+            <button data-guess="孩子">孩子</button>
+            <button class="ghost" data-guess="直接揭开">直接揭开</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="demo-card" id="demo-task">
+      <p class="demo-title">🎴 任务卡 <span class="tag">宝可梦式小任务</span></p>
+      <div class="demo-stage" style="text-align:center;">
+        <div class="fade-swap" id="task-stage">
+          <p class="hint" style="margin-bottom:var(--space-md);">抽一张今天的任务卡</p>
+          <button id="draw-task" style="font-size:var(--text-body);padding:14px 28px;">抽一张卡</button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--space-2xs);justify-content:center;">
+        <span class="flame" aria-hidden="true"></span>
+        <span>灯火</span><span class="light-count" id="light-count">0</span>
+      </div>
+    </div>
+    <div class="demo-card" id="demo-mirror">
+      <p class="demo-title">🪞 悟见卡 <span class="tag">客观自我的镜像</span></p>
+      <div class="demo-stage">
+        <div class="fade-swap" id="mirror-stage">
+          <div class="wujian-card">
+            <p style="font-size:var(--text-caption);color:var(--ink-soft);margin:0;">AI 汇总的行为事实 · 只对你可见</p>
+            <p class="fact">上周你有 <b>4 天</b> 23 点后还在客厅，是这样吗？</p>
+            <p style="font-size:var(--text-caption);color:var(--ink-soft);margin:0;">不评判、不标签 · 附证据可查看 · 随时可关闭</p>
+            <div class="yn-row">
+              <button id="yn-yes">是</button>
+              <button id="yn-no" class="ghost">不是</button>
+            </div>
+          </div>
+          <div class="ledger-drop" id="mirror-ledger"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="ceremony" aria-label="揭晓仪式流程">
+  <div class="ceremony-inner">
+    <h2>揭晓仪式 · 五步</h2>
+    <div class="steps">
+      <div class="step"><b>发现</b><span>AI 发现值得注意的家庭时刻</span></div>
+      <div class="step"><b>匿名卡</b><span>漫画分镜替代监控截图，每天 1–3 张</span></div>
+      <div class="step"><b>竞猜 / 揭开</b><span>有信息缺口才猜；都在场则直接回应邀请</span></div>
+      <div class="step"><b>回应</b><span>家庭自定义表达风格，一键回应 + 说一句</span></div>
+      <div class="step"><b>回执入册</b><span>仅本人可见的回执；确认后写入账本</span></div>
+    </div>
+  </div>
+</section>
+<section id="genesis" aria-label="开局仪式">
+  <div class="genesis-inner">
+    <h2>开局仪式 · 全家牵手，写入创世区块</h2>
+    <p class="lead">摄像头买来即处于安防模式（开箱即用）；映照模式锁定，直到全家完成开局仪式——像游戏大厅一样"牵手"，全员就绪那一刻，创世区块写入账本。<b>映照不是默认开启的监控，是全家签约后才开始的约定。</b></p>
+    <div class="hands" id="hands">
+      <div class="hand" data-who="爸爸"><div class="who">爸爸</div><div class="st">点击牵手</div></div>
+      <div class="hand" data-who="妈妈"><div class="who">妈妈</div><div class="st">点击牵手</div></div>
+      <div class="hand" data-who="孩子"><div class="who">孩子</div><div class="st">点击牵手</div></div>
+      <div class="hand" data-who="（监护代确认）"><div class="who">奶奶</div><div class="st">监护代确认</div></div>
+    </div>
+    <div class="genesis-block" id="genesis-block" aria-live="polite">
+      <div class="gb-title">⛓️ GENESIS BLOCK · 家庭账本的第一个区块</div>
+      <div class="row">confirmations: 爸爸 ✓ · 妈妈 ✓ · 孩子 ✓ · 奶奶(监护) ✓</div>
+      <div class="row">agreement: 《映照家庭协议》v1 · 规则由全家共同制定</div>
+      <div class="row">prev_hash: 0x0000…0000</div>
+      <div class="row">hash: <span style="color:var(--night-accent)">0x8f3a…c21d · 不可篡改，自此开始</span></div>
+    </div>
+  </div>
+</section>
+<section id="ledger" aria-label="家庭记忆账本">
+  <div class="ledger-inner">
+    <h2>家庭记忆账本 · 不可篡改，但可以认错</h2>
+    <p class="lead">每条记录含：事实描述、证据引用、确认人与确认时间，哈希链式存储。错误不删除，以追加更正的方式覆盖。这是"无法否认"的工程基础，也是 AI 理解家庭的唯一信息来源——<b style="color:var(--night-accent)">AI 对人的所有认识，都来自这个人自己确认过的事实。</b></p>
+    <div class="chain" id="chain">
+      <div class="entry">
+        <div class="e-fact">孩子主动收拾了客厅</div>
+        <div class="e-meta"><span>证据: 画面 #a382 · 18:32</span><span>确认: 孩子 · 18:40</span></div>
+        <div class="e-hash">hash: 8f3ac21d…</div>
+      </div>
+      <div class="entry">
+        <div class="e-fact">"上周4天23点后仍在客厅" → 本人确认：是</div>
+        <div class="e-meta"><span>证据: 活动日志 · 悟见卡</span><span>确认: 本人 · 22:15</span></div>
+        <div class="e-link">8f3ac21d…</div>
+        <div class="e-hash">hash: 7c2e91ab…</div>
+      </div>
+    </div>
+    <button id="append-entry">追加一条更正演示</button>
+  </div>
+</section>
+<section id="care" aria-label="关怀场景">
+  <h2>关注与回应 · 关怀是被发现的，不是被布置的</h2>
+  <p class="lead">安心信号是中性事实：没有行动按钮、没有回应记录、没有提醒。系统递送的是回执，不是账单。</p>
+  <div class="care-grid">
+    <div class="care-card">
+      <h3>🌿 老人的付出重新被看见</h3>
+      <div class="signal">
+        <div class="s-title">时刻卡 · 刚刚</div>
+        <p>"阳台有人侍弄了很久" —— 奶奶浇了一下午的花</p>
+      </div>
+      <div class="signal">
+        <div class="s-title">被看见回执 · 私达奶奶</div>
+        <p>"妈，你种的花开了 💛"</p>
+      </div>
+      <p class="note">老人最深的失落不是孤独，是"不再被需要"——映照让 TA 的劳动重新进入全家的目光。</p>
+    </div>
+    <div class="care-card">
+      <h3>🌙 安心信号 · 由本人定义</h3>
+      <div class="signal">
+        <div class="s-title">安心信号 · 仅子女可见</div>
+        <p>"妈妈今天 10 点起床，平常 7 点。"</p>
+      </div>
+      <p class="note">粒度与"什么算异常"由妈妈自己设置并确认。没有行动按钮——家人自己决定怎么做。孩子今天自己给爷爷打了电话，一键"记下这一刻"，爷爷收到被惦记回执。</p>
+    </div>
+  </div>
+</section>
+<section id="boundaries" aria-label="边界与永久不做">
+  <div class="b-inner">
+    <h2>边界 · 我们永久不做的事</h2>
+    <p class="lead">控制是眼睛（监视）的属性，不是镜子（映照）的属性。</p>
+    <div class="b-list">
+      <div class="b-item"><b>🚫 表情 → 情绪推测</b><span>表情不等于情绪（Barrett et al., Science 2019）；止步于行为事实，情绪的意义由人完成</span></div>
+      <div class="b-item"><b>🚫 家庭内排名与对比</b><span>灯火只花不比；无可比较，即无施压依据</span></div>
+      <div class="b-item"><b>🚫 真实金钱兑换</b><span>灯火永不兑钱；关怀一旦计酬，就从情感变成劳务</span></div>
+      <div class="b-item"><b>🚫 内疚设计</b><span>零内疚工程：没有"不得不"，关怀永远是被发现的</span></div>
+      <div class="b-item"><b>🚫 情感契约化</b><span>公约只约束共同劳动，绝不约束情感行为</span></div>
+      <div class="b-item"><b>🚫 未确认即理解</b><span>AI 对人的所有认识，必须来自本人确认过的事实</span></div>
+    </div>
+  </div>
+</section>
+<section id="team" aria-label="团队">
+  <h2>团队 · 映照</h2>
+  <div class="members">
+    <div class="member"><div class="avatar">🧭</div><b>砚仁 · 队长</b><span>产品方案 / 前端交互 / 路演</span></div>
+    <div class="member"><div class="avatar">⚙️</div><b>跳</b><span>后端服务 / 视觉与音频算法 / 设备接入</span></div>
+  </div>
+  <p class="team-note">"轻接入、重闭环"架构：引擎与前端不依赖真实硬件即可开发（模拟事件源驱动），决赛接入官方 SDK 只需替换适配层。</p>
+</section>
+<footer id="footer">
+  <p class="slogan">AI 看见生活，<em>人看见彼此</em>，越照越真。</p>
+  <p class="sub">映照 · 安克首届黑客松 · 智能安防赛道 · 见自己，见家人，见关系，见物品</p>
+</footer>
+<script>
+    (function() {
+      'use strict';
+
+      /* ============================================================
+         滚动 Reveal —— JS 增强模式
+         规则：HTML 默认不加 .reveal 类，JS 检测成功后才添加，
+               确保 JS 失败时内容始终可见（不门控）。
+         ============================================================ */
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15 });
+
+        /* 为各区块内容添加 reveal 类并观察 */
+        var revealTargets = [];
+
+        /* Hero 内容 */
+        var heroInner = document.querySelector('#hero .hero-inner');
+        if (heroInner) revealTargets.push(heroInner);
+
+        /* 三层安心：标题 + 每张卡 + 结语 */
+        var layersHead = document.querySelector('#layers .section-head');
+        if (layersHead) revealTargets.push(layersHead);
+
+        var layerCards = document.querySelectorAll('#layers .layer-card');
+        layerCards.forEach(function(card, i) {
+          card.style.setProperty('--stagger-index', i);
+          revealTargets.push(card);
+        });
+
+        var layersClosing = document.querySelector('#layers .layers-closing');
+        if (layersClosing) revealTargets.push(layersClosing);
+
+        /* 产品哲学：标题 + 各子模块 */
+        var philHead = document.querySelector('#philosophy .section-head');
+        if (philHead) revealTargets.push(philHead);
+
+        var vsPanels = document.querySelectorAll('#philosophy .vs-panel');
+        vsPanels.forEach(function(panel) { revealTargets.push(panel); });
+
+        var vsDivider = document.querySelector('#philosophy .vs-divider');
+        if (vsDivider) revealTargets.push(vsDivider);
+
+        var aiHuman = document.querySelector('#philosophy .ai-human');
+        if (aiHuman) revealTargets.push(aiHuman);
+
+        var seeItems = document.querySelectorAll('#philosophy .see-item');
+        seeItems.forEach(function(item, i) {
+          item.style.setProperty('--stagger-index', i);
+          revealTargets.push(item);
+        });
+
+        var quote = document.querySelector('#philosophy .philosophy-quote');
+        if (quote) revealTargets.push(quote);
+
+        /* 添加 reveal 类并开始观察 */
+        revealTargets.forEach(function(el) {
+          el.classList.add('reveal');
+          observer.observe(el);
+        });
+      }
+
+      /* ============================================================
+         CTA 平滑滚动（锚点导航）
+         ============================================================ */
+      var ctaLinks = document.querySelectorAll('#hero .btn[href^="#"]');
+      ctaLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          var targetId = link.getAttribute('href');
+          var target = document.querySelector(targetId);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      /* ============================================================
+         Scroll hint 平滑滚动
+         ============================================================ */
+      var scrollHint = document.querySelector('#hero .scroll-hint');
+      if (scrollHint) {
+        scrollHint.addEventListener('click', function(e) {
+          var targetId = scrollHint.getAttribute('href');
+          var target = document.querySelector(targetId);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      }
+
+    })();
+  
+
+(function(){
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function swap(el, html){ if(reduced){ el.innerHTML = html; return; } el.classList.add("out"); setTimeout(function(){ el.innerHTML = html; el.classList.remove("out"); }, 380); }
+  var momentStage = document.getElementById("moment-stage");
+  var guessRow = document.getElementById("guess-row");
+  var answered = false;
+  guessRow.addEventListener("click", function(e){
+    var btn = e.target.closest("button"); if(!btn || answered) return; answered = true;
+    var g = btn.getAttribute("data-guess");
+    var isDirect = g === "直接揭开";
+    var html = '<div class="comic" aria-label="漫画分镜">' +
+        '<div class="frame" data-emoji="🍳"></div><div class="frame" data-emoji="🥬"></div>' +
+        '<div class="frame" data-emoji="🔥"></div><div class="frame" data-emoji="🍲"></div></div>' +
+      '<p class="reveal-name">' + (isDirect ? '' : '你猜是' + g + '，揭晓——') + '是<b>爸爸</b>，他在厨房忙碌了 42 分钟——土豆牛腩正在锅里</p>' +
+      '<p class="hint">用你们家自己的风格回应一句吧</p>' +
+      '<div class="reply-options">' +
+        '<span class="reply-pick">辛苦了 ❤️</span><span class="reply-pick">今晚一定很好吃</span><span class="reply-pick">我来摆碗筷！</span></div>';
+    swap(momentStage, html);
+    var picks = momentStage.querySelectorAll(".reply-pick");
+    picks.forEach(function(p){ p.addEventListener("click", function(){
+      picks.forEach(function(x){ x.classList.remove("sel"); }); p.classList.add("sel");
+      setTimeout(function(){
+        swap(momentStage, '<div class="receipt"><span class="heart">💛</span><b>已私达给当事人</b><p class="hint" style="margin-top:6px;">爸爸收到一条仅本人可见的"被看见回执"</p></div>');
+      }, reduced ? 0 : 500);
+    }); });
+  });
+  var taskStage = document.getElementById("task-stage");
+  var lightCount = 0, lightEl = document.getElementById("light-count");
+  var tasks = [
+    { q: "站起来，离开沙发 3 分钟", s: "你今天已在沙发连续工作 3 小时", v: "镜头将核实画面中出现的站立活动" },
+    { q: "读 10 分钟书", s: "你上次翻开书，是 12 天前", v: "镜头将核实阅读姿态与持续时长" },
+    { q: "给团长梳 5 分钟毛", s: "它今天独自在家 9 小时了", v: "镜头将核对你与它的互动画面" }
+  ];
+  function drawTask(){
+    var t = tasks[Math.floor(Math.random()*tasks.length)];
+    swap(taskStage, '<div class="task-face"><p style="font-size:var(--text-caption);color:var(--ink-soft);margin:0;">今日任务卡</p>' +
+      '<p class="q">' + t.q + '</p><p class="hint">' + t.s + '</p>' +
+      '<p class="hint" style="color:var(--accent-deep);margin-top:6px;">📷 ' + t.v + '</p>' +
+      '<div class="btn-row" style="margin-top:var(--space-md);"><button id="task-done">完成了</button><button class="ghost" id="task-skip">跳过（永远可跳过）</button></div></div>');
+    document.getElementById("task-done").addEventListener("click", function(){
+      swap(taskStage, '<div class="receipt"><span class="heart">📷</span><b>智能镜头核实中…</b><p class="hint" style="margin-top:6px;">画面帧 → AI 复核 → 确认时长与动作</p></div>');
+      setTimeout(function(){
+        lightCount += 1; lightEl.textContent = lightCount;
+        swap(taskStage, '<div class="receipt"><span class="heart">🕯️</span><b>✓ 已核实 · 灯火 +1</b><p class="hint" style="margin-top:6px;">AI 提议、镜头核实、人确认——自觉不是机制，核实才是</p></div>');
+      }, reduced ? 0 : 1600);
+    });
+    document.getElementById("task-skip").addEventListener("click", function(){
+      swap(taskStage, '<p class="hint">已跳过，没有惩罚、没有连续打卡压力。</p><div style="text-align:center;margin-top:var(--space-md);"><button id="task-again">再抽一张</button></div>');
+      document.getElementById("task-again").addEventListener("click", drawTask);
+    });
+  }
+  document.getElementById("draw-task").addEventListener("click", drawTask);
+  var mirrorLedger = document.getElementById("mirror-ledger");
+  function confirmMirror(ans){
+    var prev = "0000a3f9";
+    var hash = "7c2e" + Math.random().toString(16).slice(2,10);
+    mirrorLedger.innerHTML = '✓ 已确认入册 · 追加式账本<br>事实: 上周4天23点后仍在客厅 → 本人确认: <b style="color:var(--night-accent)">' + ans + '</b><br>prev_hash: <span class="hash">' + prev + '</span> → hash: <span class="hash">' + hash + '</span>';
+    mirrorLedger.classList.add("show");
+    document.getElementById("yn-yes").disabled = true; document.getElementById("yn-no").disabled = true;
+  }
+  document.getElementById("yn-yes").addEventListener("click", function(){ confirmMirror("是"); });
+  document.getElementById("yn-no").addEventListener("click", function(){ confirmMirror("不是"); });
+})();
+
+
+(function(){
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var hands = document.querySelectorAll("#genesis .hand");
+  var block = document.getElementById("genesis-block");
+  hands.forEach(function(h){
+    h.addEventListener("click", function(){
+      h.classList.add("joined");
+      h.querySelector(".st").textContent = "已牵手 ✓";
+      var all = document.querySelectorAll("#genesis .hand.joined").length;
+      if(all === hands.length){ block.classList.add("show"); }
+    });
+  });
+  var chain = document.getElementById("chain");
+  var prevHash = "7c2e91ab";
+  document.getElementById("append-entry").addEventListener("click", function(){
+    var nh = "e9" + Math.random().toString(16).slice(2,8);
+    var div = document.createElement("div");
+    div.className = "entry";
+    div.innerHTML = '<div class="e-fact">更正：前条"23点后仍在客厅"实际为 3 天（证据复核）</div>' +
+      '<div class="e-meta"><span>证据: 复核帧 #b091</span><span>确认: 本人 · 现在</span></div>' +
+      '<div class="e-link">' + prevHash + '…</div>' +
+      '<div class="e-hash">hash: ' + nh + '…</div>';
+    chain.appendChild(div);
+    prevHash = nh;
+    if(!reduced){ div.style.opacity = "0"; div.style.transform = "translateY(10px)"; requestAnimationFrame(function(){ div.style.transition = "opacity .6s cubic-bezier(.25,1,.5,1), transform .6s cubic-bezier(.25,1,.5,1)"; div.style.opacity = "1"; div.style.transform = "none"; }); }
+  });
+})();
+
+</script>
+<script>
+(function(){
+  var canvas = document.getElementById("lantern-canvas");
+  if (!canvas) return;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var hero = document.getElementById("hero");
+  var ctx = canvas.getContext("2d");
+  var W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  function resize(){
+    W = hero.clientWidth; H = hero.clientHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + "px"; canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener("resize", resize);
+  if (reduced) return;
+
+  var COUNT = 26;
+  var ps = [];
+  function spawn(init){
+    return {
+      x: Math.random() * W,
+      y: init ? Math.random() * H : H + 20,
+      r: 1.2 + Math.random() * 2.8,
+      vy: 0.25 + Math.random() * 0.55,
+      wobble: Math.random() * Math.PI * 2,
+      ws: 0.4 + Math.random() * 0.9,
+      amp: 10 + Math.random() * 24,
+      hue: 55 + Math.random() * 30,
+      life: 0,
+      max: 700 + Math.random() * 500
+    };
+  }
+  for (var i = 0; i < COUNT; i++) ps.push(spawn(true));
+
+  var t = 0;
+  function tick(){
+    t++;
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < ps.length; i++){
+      var p = ps[i];
+      p.life++;
+      p.y -= p.vy;
+      var fadeIn = Math.min(1, p.life / 60);
+      var fadeOut = Math.min(1, (p.max - p.life) / 120);
+      var alpha = Math.max(0, Math.min(fadeIn, fadeOut)) * 0.8;
+      if (p.life >= p.max || p.y < -20) { ps[i] = spawn(false); continue; }
+      var x = p.x + Math.sin(t / (60 / p.ws) + p.wobble) * p.amp * 0.1;
+      var flick = 0.75 + 0.25 * Math.sin(t * 0.08 + p.wobble * 3);
+      ctx.beginPath();
+      var g = ctx.createRadialGradient(x, p.y, 0, x, p.y, p.r * 5);
+      g.addColorStop(0, "oklch(78% 0.15 " + p.hue + " / " + (alpha * flick) + ")");
+      g.addColorStop(0.5, "oklch(72% 0.15 " + p.hue + " / " + (alpha * flick * 0.4) + ")");
+      g.addColorStop(1, "oklch(72% 0.15 " + p.hue + " / 0)");
+      ctx.fillStyle = g;
+      ctx.arc(x, p.y, p.r * 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle = "oklch(85% 0.16 " + p.hue + " / " + (alpha * flick) + ")";
+      ctx.arc(x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
